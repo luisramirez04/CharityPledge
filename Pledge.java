@@ -156,6 +156,36 @@ public class Pledge extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>                        
+    private void SubmitButtonActionPerformed(java.awt.event.ActionEvent evt)
+    {
+       String name, charity, contribution; 
+       name = NameTextField.getText(); 
+       contribution = AmountTextField.getText(); 
+       if(name.equals(""))
+       {
+         JOptionPane.showMessageDialog(rootPane, "Please enter your name. "); 
+         return; 
+        }
+        if(contribution.equals(""))
+        {
+          JOptionPane.showMessageDialog(rootPane, "Please enter an amount. ");
+          return;
+         }
+         if (CharityComboBox.getSelectedIndex() == 0) 
+         {
+           JOptionPane.showMessageDialog(rootPane, "Please select a charity. ");
+           return;
+          }
+          else 
+          {
+            charity = CharityComboBox.getSelectedItem().toString();
+            Object[] row = {name,charity,contribution}; 
+            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            model.addRow(row);
+//WriteJson(name, charity, contribution);
+// WriteDB(name, charity, contribution);
+           }
+    }
 
     private void ViewButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
         new PledgeView().setVisible(true);
