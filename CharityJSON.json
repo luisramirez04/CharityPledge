@@ -1,3 +1,27 @@
-{
-    "name": "patrick"
-}
+{"contributors": [
+     {
+          "contribution": "31",
+          "charity": "personal",
+          "name": "Patrick de los Reyes"
+     },
+     {
+          "contribution": "28",
+          "charity": "personal",
+          "name": "Tyrone Fields"
+     },
+     {
+          "contribution": "31",
+          "charity": "business",
+          "name": "Luiz Ramirez"
+     },
+     {
+          "contribution": "49",
+          "charity": "business",
+          "name": "Duane Borchick"
+     },
+     {
+          "contribution": "12",
+          "charity": "mine",
+          "name": "blah"
+     }
+]}
