@@ -1,27 +1,24 @@
-{"contributors": [
-     {
-          "contribution": "31",
-          "charity": "personal",
-          "name": "Patrick de los Reyes"
-     },
-     {
-          "contribution": "28",
-          "charity": "personal",
-          "name": "Tyrone Fields"
-     },
-     {
-          "contribution": "31",
-          "charity": "business",
-          "name": "Luiz Ramirez"
-     },
-     {
-          "contribution": "49",
-          "charity": "business",
-          "name": "Duane Borchick"
-     },
-     {
-          "contribution": "12",
-          "charity": "mine",
-          "name": "blah"
-     }
-]}
+{
+  "contributors": [
+    {
+      "name": "Patrick de los Reyes",
+      "charity": "ebola",
+      "contribution": "31"
+    },
+    {
+      "name": "Tyrone Fields",
+      "charity": "whatever",
+      "contribution": "28"
+    },
+    {
+      "name": "Luiz Ramirez",
+      "charity": "Bring back 90210",
+      "contribution": "31"
+    },
+    {
+      "name": "Duane Borchick",
+      "charity": "safety",
+      "contribution": "49"
+    }
+  ]
+}
