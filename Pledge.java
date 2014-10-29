@@ -10,9 +10,19 @@
  */
 package charitypledge;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JOptionPane;
 import javax.swing.JFrame;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+import org.json.JSONWriter;
 
 /**
  *
@@ -25,7 +35,11 @@ public class Pledge extends javax.swing.JFrame {
      */
     public Pledge() {
         initComponents();
+        tableRefresh();
     }
+    
+    public static String JSONFile = "C:\\Temp\\CharityJSON.json";
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -257,11 +271,131 @@ public class Pledge extends javax.swing.JFrame {
             Object[] row = {name,charity,contribution,false}; 
             DefaultTableModel model = (DefaultTableModel) PledgeViewTable.getModel();
             model.addRow(row);
-            //WriteJson(name, charity, contribution);
+            String[] JSONrow = {"name", name, "charity", charity, "contribution", contribution};
+            JsonWrite(JSONrow);
             // WriteDB(name, charity, contribution);
         }
     }                                            
 
+    public void JsonImport() {
+
+	try {
+            InputStream foo = new FileInputStream(JSONFile);
+            JSONTokener t = new JSONTokener(foo);
+            JSONObject jsonObj = new JSONObject(t);
+            foo.close();
+            JSONArray jsonList = jsonObj.getJSONArray("contributors");
+            for (int i = 0; i < jsonList.length(); i++) 
+            {
+                // loop array
+                JSONObject objects = jsonList.getJSONObject(i);
+                String nameField = objects.getString("name");
+                String typeField = objects.getString("charity");
+                String contributionField = objects.getString("contribution");
+                // Add row to jTable
+                loadPledgeTable(nameField, typeField, contributionField);
+            }
+	} catch (FileNotFoundException e) {
+                    JSONWriter jsonWriter;
+                    try {
+                        jsonWriter = new JSONWriter(new FileWriter(JSONFile));
+                        jsonWriter.object();
+                        jsonWriter.key("contributors");
+                        jsonWriter.array();
+                        jsonWriter.endArray();
+                        jsonWriter.endObject();
+                        //jsonWriter.close();
+                        tableRefresh();
+                    } catch (IOException f) {
+                        f.printStackTrace();
+                    } catch (JSONException g) {
+                        g.printStackTrace();
+                    }
+        } catch (IOException e) {
+                e.printStackTrace();
+        } catch (JSONException e) {
+                e.printStackTrace();
+        }
+    }
+    
+    public void JsonWrite(String[] args) {
+
+        String[] values = args;
+        JSONObject obj = new JSONObject();
+        JSONArray objArray = new JSONArray();
+        try {
+            if (args == null || values.length == 0) {
+                throw new Exception("Noting to write to file");
+            } else {
+                String title = "";
+                String value = "";
+                
+                for (int i = (values.length - 1); i >= 0; i--) {
+                    if ((i % 2) ==0) {
+                        title = values[i];
+                        obj.put(title, value);
+                    } else {
+                        value = values[i];
+                    }
+                }
+                objArray.put(obj);
+            }
+           
+            try {
+                try {
+                    InputStream foo = new FileInputStream(JSONFile);
+                    JSONTokener t = new JSONTokener(foo);
+                    JSONObject json = new JSONObject(t);
+                    foo.close();
+                    FileWriter file = new FileWriter(JSONFile);
+                    json.append("contributors", obj);
+                    file.write(json.toString(5));
+                    file.close();
+                    tableRefresh();
+                } catch (FileNotFoundException e) {
+                    JSONWriter jsonWriter;
+                    try {
+                        jsonWriter = new JSONWriter(new FileWriter(JSONFile));
+                        jsonWriter.object();
+                        jsonWriter.key("contributors");
+                        jsonWriter.array();
+                        jsonWriter.endArray();
+                        jsonWriter.endObject();
+                        InputStream foo = new FileInputStream(JSONFile);
+                        JSONTokener t = new JSONTokener(foo);
+                        JSONObject json = new JSONObject(t);
+                        foo.close();
+                        FileWriter file = new FileWriter(JSONFile);
+                        json.append("contributors", obj);
+                        file.write(json.toString(5));
+                        file.close();
+                        tableRefresh();
+                    } catch (IOException f) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (IOException e) {
+                    e.printStackTrace();
+            }
+        } catch(Exception e) {
+            int pic = JOptionPane.ERROR_MESSAGE; 
+            JOptionPane.showMessageDialog(null, e,"",pic);
+        }
+    }
+ 
+    private void loadPledgeTable(String name, String type, String contribution) {
+                // Set Object[] variable and add row to jTable
+                Object[] row =  {name,type,contribution};  
+                DefaultTableModel model = (DefaultTableModel) PledgeViewTable.getModel();
+                model.addRow(row);
+    }
+    
+    public void tableRefresh() {
+        DefaultTableModel model = (DefaultTableModel) PledgeViewTable.getModel();
+        model.setRowCount(0);
+        JsonImport();
+    }
+    
     // Variables declaration - do not modify                     
     private javax.swing.JLabel Amount;
     private javax.swing.JTextField AmountTextField;
